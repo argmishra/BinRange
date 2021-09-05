@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -34,41 +35,68 @@ public class BinRangeInfoCacheControllerTest extends BaseControllerTest {
 
     @Test
     public void createBinRangeInfo_success() throws Exception {
-        BinRangeInfo binRangeInfo = BinRangeInfoTest.generateTestEntity();
+        BinRangeInfo requestBody = BinRangeInfoTest.generateTestEntity();
+        requestBody.setRef(null);
+        BinRangeInfo returnType = BinRangeInfoTest.generateTestEntity();
+        when(binRangeService.createBinRangeInfo(requestBody)).thenReturn(returnType);
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/binRangeInfoCache")
-                .content(objectMapper.writeValueAsString(binRangeInfo))
-                .contentType(MediaType.APPLICATION_JSON);
-
+            .content(objectMapper.writeValueAsString(requestBody)).contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getMockMvc().perform(builder).andReturn().getResponse();
+
+        BinRangeInfo responseBody = objectMapper.readValue(response.getContentAsString(), BinRangeInfo.class);
+
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+        assertNotNull(responseBody.getRef());
+        assertEquals("EURO",responseBody.getCurrencyCode());
+        assertEquals("KBC",responseBody.getBankName());
     }
 
     @Test
-    public void updateBinRangeInfoByRef_success() throws Exception {
-        BinRangeInfo binRangeInfo = BinRangeInfoTest.generateTestEntity();
+    public void updateBinRangeInfo_success() throws Exception {
+        BinRangeInfo requestBody = BinRangeInfoTest.generateTestEntity();
+        requestBody.setRef(null);
+        BinRangeInfo returnType = BinRangeInfoTest.generateTestEntity();
+        when(binRangeService.createBinRangeInfo(requestBody)).thenReturn(returnType);
+        when(binRangeService.getBinRangeInfo(returnType.getRef())).thenReturn(returnType);
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-                .put("/binRangeInfoCache/{ref}", binRangeInfo.getRef())
-            .content(objectMapper.writeValueAsString(binRangeInfo))
-                .contentType(MediaType.APPLICATION_JSON);
-
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/binRangeInfoCache")
+            .content(objectMapper.writeValueAsString(requestBody)).contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getMockMvc().perform(builder).andReturn().getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
-    }
 
-    @Test
-    public void deleteBinRangeInfoByRef_success() throws Exception {
-        BinRangeInfo binRangeInfo = BinRangeInfoTest.generateTestEntity();
+        BinRangeInfo responseBody = objectMapper.readValue(response.getContentAsString(), BinRangeInfo.class);
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-                .post("/binRangeInfoCache/{ref}", binRangeInfo.getRef())
-            .content(objectMapper.writeValueAsString(binRangeInfo))
-                .contentType(MediaType.APPLICATION_JSON);
+        requestBody = BinRangeInfoTest.generateTestEntity();
+        requestBody.setBankName("AIB");
 
         builder = MockMvcRequestBuilders
-            .delete("/binRangeInfoCache/{ref}", binRangeInfo.getRef());
+            .put("/binRangeInfoCache/{ref}", responseBody.getRef())
+            .content(objectMapper.writeValueAsString(requestBody)).contentType(MediaType.APPLICATION_JSON);
+        response = getMockMvc().perform(builder).andReturn().getResponse();
+
+        responseBody = objectMapper.readValue(response.getContentAsString(), BinRangeInfo.class);
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals("AIB",responseBody.getBankName());
+    }
+
+    @Test
+    public void deleteBinRangeInfo_success() throws Exception {
+        BinRangeInfo requestBody = BinRangeInfoTest.generateTestEntity();
+        requestBody.setRef(null);
+        BinRangeInfo returnType = BinRangeInfoTest.generateTestEntity();
+        when(binRangeService.createBinRangeInfo(requestBody)).thenReturn(returnType);
+        when(binRangeService.getBinRangeInfo(returnType.getRef())).thenReturn(returnType);
+
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/binRangeInfoCache")
+            .content(objectMapper.writeValueAsString(requestBody)).contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getMockMvc().perform(builder).andReturn().getResponse();
+
+        BinRangeInfo responseBody = objectMapper.readValue(response.getContentAsString(), BinRangeInfo.class);
+
+        builder = MockMvcRequestBuilders
+            .delete("/binRangeInfoCache/{ref}", responseBody.getRef());
+        response = getMockMvc().perform(builder).andReturn().getResponse();
 
         assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
     }

@@ -45,10 +45,10 @@ public class BinRangeInfoCacheController {
     }
 
     @PutMapping("{ref}")
-    public ResponseEntity<BinRangeInfo> updateBinRangeInfoByRef(@PathVariable("ref") UUID ref, @RequestBody @Valid BinRangeInfo binRangeInfo) {
-        BinRangeInfo foundBinRange = binRangeService.getBinRangeInfoByRef(ref);
+    public ResponseEntity<BinRangeInfo> updateBinRangeInfo(@PathVariable("ref") UUID ref, @RequestBody @Valid BinRangeInfo binRangeInfo) {
+        BinRangeInfo foundBinRange = binRangeService.getBinRangeInfo(ref);
         binRangeService.updateBinRangeInfo(ref, binRangeInfo);
-        BinRangeInfo updatedFoundBinRange = binRangeService.getBinRangeInfoByRef(ref);
+        BinRangeInfo updatedFoundBinRange = binRangeService.getBinRangeInfo(ref);
 
         eventManager.publishAsync(new AuditEvent(foundBinRange, updatedFoundBinRange));
 
@@ -56,9 +56,9 @@ public class BinRangeInfoCacheController {
     }
 
     @DeleteMapping("{ref}")
-    public ResponseEntity<Void> deleteBinRangeInfoByRef(@PathVariable("ref") UUID ref) {
-        BinRangeInfo binRangeInfo = binRangeService.getBinRangeInfoByRef(ref);
-        binRangeService.deleteBinRangeInfoByRef(binRangeInfo);
+    public ResponseEntity<Void> deleteBinRangeInfo(@PathVariable("ref") UUID ref) {
+        BinRangeInfo binRangeInfo = binRangeService.getBinRangeInfo(ref);
+        binRangeService.deleteBinRangeInfo(binRangeInfo);
 
         eventManager.publishAsync(new AuditEvent(binRangeInfo,null));
 

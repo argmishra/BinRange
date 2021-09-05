@@ -70,11 +70,13 @@ public class CachingBinRangeServiceTest {
         String testBankOnePan = "4263000000000001";
         String testBankTwoPan = "4319000000000001";
         String testBankThreePan = "5432000000000001";
+
         assertTrue(cachingBinRangeService.findBinRangeInfoByPan(testBankOnePan).isPresent());
         assertTrue(cachingBinRangeService.findBinRangeInfoByPan(testBankTwoPan).isPresent());
         assertTrue(cachingBinRangeService.findBinRangeInfoByPan(testBankThreePan).isPresent());
 
         String testBankFourPan = "5263000000000001";
+
         cachingBinRangeService.populateCache(getLatestBinRangeInfo());
 
         assertTrue(cachingBinRangeService.findBinRangeInfoByPan(testBankOnePan).isPresent());
@@ -124,7 +126,7 @@ public class CachingBinRangeServiceTest {
 
         BinRangeInfo binRangeInfoResponse = cachingBinRangeService.createBinRangeInfo(binRangeInfo);
 
-        binRangeInfoResponse = cachingBinRangeService.getBinRangeInfoByRef(binRangeInfoResponse.getRef());
+        binRangeInfoResponse = cachingBinRangeService.getBinRangeInfo(binRangeInfoResponse.getRef());
 
         assertNotNull(binRangeInfoResponse);
     }
@@ -132,7 +134,7 @@ public class CachingBinRangeServiceTest {
     @Test
     public void getBinRangeInfoByRef_fail() {
         assertThrows(BinRangeInfoNotFoundException.class, () -> {
-            cachingBinRangeService.getBinRangeInfoByRef(UUID.randomUUID());
+            cachingBinRangeService.getBinRangeInfo(UUID.randomUUID());
         });
     }
 
@@ -154,7 +156,7 @@ public class CachingBinRangeServiceTest {
 
         cachingBinRangeService.updateBinRangeInfo(binRangeInfoResponse.getRef(), binRangeInfo);
 
-        binRangeInfoResponse = cachingBinRangeService.getBinRangeInfoByRef(binRangeInfoResponse.getRef());
+        binRangeInfoResponse = cachingBinRangeService.getBinRangeInfo(binRangeInfoResponse.getRef());
 
         assertEquals("test", binRangeInfoResponse.getBankName());
     }
@@ -168,9 +170,9 @@ public class CachingBinRangeServiceTest {
         binRangeInfo.setCurrencyCode(faker.currency().code());
 
         BinRangeInfo binRangeInfoResponse = cachingBinRangeService.createBinRangeInfo(binRangeInfo);
-        binRangeInfoResponse = cachingBinRangeService.getBinRangeInfoByRef(binRangeInfoResponse.getRef());
+        binRangeInfoResponse = cachingBinRangeService.getBinRangeInfo(binRangeInfoResponse.getRef());
 
-        cachingBinRangeService.deleteBinRangeInfoByRef(binRangeInfoResponse);
+        cachingBinRangeService.deleteBinRangeInfo(binRangeInfoResponse);
 
     }
 }

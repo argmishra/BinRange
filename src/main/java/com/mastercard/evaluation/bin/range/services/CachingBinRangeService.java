@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +42,8 @@ public class CachingBinRangeService implements BinRangeService {
     private final ObjectMapper objectMapper;
     private final EventManager eventManager;
 
-    private HashMap<UUID, BinRangeInfo> binRangeInfoCache = new HashMap<>();
-    private NavigableMap<BinRange, UUID> binRangeInfoByBinRangeIndex = new TreeMap<>();
+    private HashMap<UUID, BinRangeInfo> binRangeInfoCache;
+    private NavigableMap<BinRange, UUID> binRangeInfoByBinRangeIndex;
 
     @Autowired
     public CachingBinRangeService(ObjectMapper objectMapper, EventManager eventManager) {
@@ -76,12 +75,7 @@ public class CachingBinRangeService implements BinRangeService {
     public Optional<BinRangeInfo> findBinRangeInfoByPan(String pan) {
         lock.lock();
         try {
-
-
-            Optional<UUID> binRangeInfo = Optional.ofNullable(binRangeInfoByBinRangeIndex.get(new BinRange(new BigDecimal(pan), new BigDecimal(pan))));
-
-           // Optional<UUID> binRangeInfo = Optional.ofNullable(binRangeInfoByBinRangeIndex.get(new BinRange(pan)));
-
+           Optional<UUID> binRangeInfo = Optional.ofNullable(binRangeInfoByBinRangeIndex.get(new BinRange(pan)));
             return binRangeInfo.isPresent() ?
                     Optional.ofNullable(binRangeInfoCache.get(binRangeInfo.get())) :
                     Optional.empty();
@@ -95,7 +89,9 @@ public class CachingBinRangeService implements BinRangeService {
         lock.lock();
 
         try {
-            binTableEntries.forEach(this::populateCacheAndIndices);
+           binRangeInfoCache = new HashMap<>();
+           binRangeInfoByBinRangeIndex = new TreeMap<>();
+           binTableEntries.forEach(this::populateCacheAndIndices);
         } finally {
             lock.unlock();
         }
@@ -115,7 +111,7 @@ public class CachingBinRangeService implements BinRangeService {
     }
 
     @Override
-    public BinRangeInfo getBinRangeInfoByRef(UUID ref){
+    public BinRangeInfo getBinRangeInfo(UUID ref){
         lock.lock();
 
         try {
@@ -140,7 +136,7 @@ public class CachingBinRangeService implements BinRangeService {
     }
 
     @Override
-    public void deleteBinRangeInfoByRef(BinRangeInfo binRangeInfo){
+    public void deleteBinRangeInfo(BinRangeInfo binRangeInfo){
         lock.lock();
 
         try {

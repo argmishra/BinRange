@@ -31,5 +31,4 @@ public class AuditEvent<T> implements Event {
 
         return "createdAt = {" + createdAt + "}, before = {" + before + "}, after = {" + after + "}";
     }
-
 }

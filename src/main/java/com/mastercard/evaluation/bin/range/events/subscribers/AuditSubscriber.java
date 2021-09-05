@@ -28,8 +28,8 @@ public class AuditSubscriber implements Subscriber<AuditEvent> {
         try (FileWriter file = new FileWriter(new File("audit-log.txt").getAbsolutePath(), true)){
             file.append(event.toString() + "\n");
             file.flush();
-        }catch (Exception ex){
-            ex.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

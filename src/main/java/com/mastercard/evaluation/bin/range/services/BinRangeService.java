@@ -11,9 +11,9 @@ public interface BinRangeService {
 
     BinRangeInfo createBinRangeInfo(BinRangeInfo binRangeInfo);
 
-    BinRangeInfo getBinRangeInfoByRef(UUID ref);
+    BinRangeInfo getBinRangeInfo(UUID ref);
 
     void updateBinRangeInfo(UUID ref, BinRangeInfo binRangeInfo);
 
-    void deleteBinRangeInfoByRef(BinRangeInfo binRangeInfo);
+    void deleteBinRangeInfo(BinRangeInfo binRangeInfo);
 }

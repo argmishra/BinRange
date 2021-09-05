@@ -75,7 +75,3 @@ runs successfully with `java -jar target/mastercard-evaluation-bin-range-applica
 
 ## References
 * [How to create a Merge Request](https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html)
-
-
-1. Solve P1
-2. Test for service

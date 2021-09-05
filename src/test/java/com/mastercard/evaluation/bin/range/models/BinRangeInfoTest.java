@@ -20,14 +20,14 @@ public class BinRangeInfoTest {
     public void shouldTestForEquality() {
         BinRangeInfo binRangeInfo = new BinRangeInfo();
         binRangeInfo.setRef(UUID.fromString("2A480C8A-83CA-4BB7-95B7-F19CEC97B3FD"));
-        binRangeInfo.setStart(new BigDecimal("0000000000000000"));
+        binRangeInfo.setStart(new BigDecimal("4263000000000000"));
         binRangeInfo.setEnd(new BigDecimal("4263999999999999"));
         binRangeInfo.setBankName("SOME_BANK");
         binRangeInfo.setCurrencyCode("EUR");
 
         BinRangeInfo secondBinRangeInfo = new BinRangeInfo();
         secondBinRangeInfo.setRef(UUID.fromString("2A480C8A-83CA-4BB7-95B7-F19CEC97B3FD"));
-        secondBinRangeInfo.setStart(new BigDecimal("0000000000000000"));
+        secondBinRangeInfo.setStart(new BigDecimal("4263000000000000"));
         secondBinRangeInfo.setEnd(new BigDecimal("4263999999999999"));
         secondBinRangeInfo.setBankName("SOME_BANK");
         secondBinRangeInfo.setCurrencyCode("EUR");
@@ -39,14 +39,14 @@ public class BinRangeInfoTest {
     public void shouldTestForInEquality() {
         BinRangeInfo binRangeInfo = new BinRangeInfo();
         binRangeInfo.setRef(UUID.fromString("2A480C8A-83CA-4BB7-95B7-F19CEC97B3FD"));
-        binRangeInfo.setStart(new BigDecimal("0000000000000000"));
+        binRangeInfo.setStart(new BigDecimal("4263000000000000"));
         binRangeInfo.setEnd(new BigDecimal("4263999999999999"));
         binRangeInfo.setBankName(faker.company().name());
         binRangeInfo.setCurrencyCode(faker.currency().code());
 
         BinRangeInfo secondBinRangeInfo = new BinRangeInfo();
         secondBinRangeInfo.setRef(UUID.fromString("2A480C8A-83CA-4BB7-95B7-F19CEC97B3FD"));
-        secondBinRangeInfo.setStart(new BigDecimal("0000000000000000"));
+        secondBinRangeInfo.setStart(new BigDecimal("4263000000000000"));
         secondBinRangeInfo.setEnd(new BigDecimal("4263999999999999"));
         secondBinRangeInfo.setBankName(faker.company().name());
         secondBinRangeInfo.setCurrencyCode(faker.currency().code());
@@ -69,8 +69,8 @@ public class BinRangeInfoTest {
     public static BinRangeInfo generateTestEntity(){
         String randomBin = Integer.toString(1000 + new Random().nextInt(9999));
         BinRangeInfo binRangeInfo = new BinRangeInfo();
-        binRangeInfo.setCurrencyCode(new Faker().currency().code());
-        binRangeInfo.setBankName(new Faker().company().name());
+        binRangeInfo.setCurrencyCode("EURO");
+        binRangeInfo.setBankName("KBC");
         binRangeInfo.setRef(UUID.randomUUID());
         binRangeInfo.setEnd(new BigDecimal(randomBin + "999999999999"));
         binRangeInfo.setStart(new BigDecimal(randomBin + "000000000000"));

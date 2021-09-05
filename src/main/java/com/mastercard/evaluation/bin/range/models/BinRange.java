@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @ToString
+@AllArgsConstructor
 public class BinRange implements Comparable<BinRange> {
   private BigDecimal start;
   private BigDecimal end;
@@ -14,11 +15,6 @@ public class BinRange implements Comparable<BinRange> {
   public BinRange(String pan) {
     this.start = new BigDecimal(pan);
     this.end = new BigDecimal(pan);
-  }
-
-  public BinRange(BigDecimal start, BigDecimal end) {
-    this.start = start;
-    this.end = end;
   }
 
   @Override
@@ -38,13 +34,12 @@ public class BinRange implements Comparable<BinRange> {
   @Override
   public int compareTo(BinRange o) {
     int result = 0;
-
     if (start.compareTo(o.end) > 0) {
       result = -1;
     } else if (end.compareTo(o.start) < 0) {
       result = 1;
     }
 
-    return result;
+     return result;
   }
 }
